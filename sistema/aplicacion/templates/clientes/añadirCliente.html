@@ -1,0 +1,15 @@
+{% extends  "base.html"%}
+{% load static %}
+{%block titulo%} AÑADIR PERSONAL {%endblock%}
+{%block link%} <link rel="stylesheet" href="{% static 'css/crear.css' %}"/> {%endblock%}
+{%block cuerpo%} 
+
+<div class = "card">
+    <div class = "card-header">
+        REGISTRO DE CLIENTES
+    </div>
+    <div class = "card-body">
+        {%include 'clientes\formCliente.html'%}
+    </div>
+</div>
+{%endblock%}

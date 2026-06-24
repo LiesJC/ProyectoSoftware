@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %} Panel de Producción {% endblock %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'css/formulario.css' %}">
+{% endblock %}
+
+{% block cuerpo %}
+
+<!-- IMPORTANTE: margen para no chocar con el encabezado -->
+<div class="container-fluid mt-4">
+    <div class="row gx-0 panel-bg">
+
+        <!-- ================= IZQUIERDA ================= -->
+        <div class="col-6 p-3">
+
+            <!-- Selectores -->
+            <div class="d-flex gap-2 mb-3">
+                <select id="month" class="form-select"></select>
+                <select id="year" class="form-select"></select>
+            </div>
+
+            <!-- Días -->
+            <div class="calendar calendar-header mb-1">
+                <div>Dom</div><div>Lun</div><div>Mar</div>
+                <div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+            </div>
+
+            <!-- Calendario -->
+            <div id="calendar" class="calendar"></div>
+        </div>
+
+        <!-- ================= DERECHA ================= -->
+        <div class="col-6 p-3 d-flex flex-column">
+
+            <!-- BOTONES -->
+            <div class="card mb-3">
+                <div class="card-body d-grid gap-2">
+                    <button class="btn btn-primary">Nuevo proyecto</button>
+                    <button class="btn btn-outline-primary">Ver todos los proyectos</button>
+                    <button class="btn btn-outline-primary">Inventario de proyectos</button>
+                    <button class="btn btn-outline-primary">Inventario de producción</button>
+                    <button class="btn btn-outline-primary">Comunicación</button>
+                    <button class="btn btn-outline-primary">Archivos</button>
+                </div>
+            </div>
+
+            <!-- FALTANTES -->
+            <div class="card flex-grow-1 overflow-auto">
+                <div class="card-header fw-bold">
+                    Faltantes en Producción
+                </div>
+
+                <div class="card-body d-flex flex-column gap-2">
+                    <div class="faltante-item">Elemento faltante A</div>
+                    <div class="faltante-item">Elemento faltante B</div>
+                    <div class="faltante-item">Elemento faltante C</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const monthSelect = document.getElementById("month");
+const yearSelect = document.getElementById("year");
+const calendar = document.getElementById("calendar");
+
+const months = [
+ "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+ "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+];
+
+months.forEach((m,i)=>{
+ monthSelect.innerHTML += `<option value="${i}">${m}</option>`;
+});
+
+for(let y=2000;y<=2035;y++){
+ yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+}
+
+const today = new Date();
+monthSelect.value = today.getMonth();
+yearSelect.value = today.getFullYear();
+
+function renderCalendar(){
+ calendar.innerHTML = "";
+ const month = monthSelect.value;
+ const year = yearSelect.value;
+ const firstDay = new Date(year, month, 1).getDay();
+ const days = new Date(year, Number(month)+1, 0).getDate();
+
+ for(let i=0;i<firstDay;i++){
+   calendar.innerHTML += `<div></div>`;
+ }
+
+ for(let d=1;d<=days;d++){
+   calendar.innerHTML += `
+    <div class="day">
+      <strong>${d}</strong>
+      <button class="btn btn-sm btn-primary w-100">Ver</button>
+    </div>`;
+ }
+}
+
+monthSelect.onchange = renderCalendar;
+yearSelect.onchange = renderCalendar;
+renderCalendar();
+</script>
+
+{% endblock %}

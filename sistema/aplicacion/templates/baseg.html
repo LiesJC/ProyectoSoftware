@@ -1,0 +1,71 @@
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <!--SISTEMA BOTSTRAP 5.3.1-->
+    <head>
+        <title>{%block titulo%}  {%endblock%}</title>          <!--El titulo se coloca en la pestaña de configutacion-->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"/>
+        <link rel="icon" href="{% static 'imagenes/logoelectronica1.jpg' %}" type="image/png">
+        <link rel="stylesheet" href="{% static 'css/cabecera.css' %}"/>
+        {%block link%}  {%endblock%}
+    </head>
+
+
+
+    <body>
+        {% if not reporte %}      
+        <nav class="navbar navbar-expand navbar">
+            <div class="nav navbar-nav">
+                <img class="ImagEncabezado" src="{% static 'imagenes/upea.png' %}" width="100" alt="Logo"/>
+                <!--Pestañas exteriores-->
+                <a class="nav-item nav-link" href="{% url 'PRINCIPAL'%}">Inicio</a>
+                <a class="nav-item nav-link" href="{% url 'INFORMACION'%}">Quienes somos</a>
+                <a class="nav-item nav-link" href="{% url 'VER'%}">Ver Productos</a>
+                <!--<a class="nav-item nav-link" href="{% url 'CAMARA'%}">Camara</a>
+                <a class="nav-item nav-link" href="{% url 'CAMARA_RED'%}">Camara_Red</a>
+                <a class="nav-item nav-link" href="{% url 'PAGINA_TECNICA'%}">Area Tecnica</a>
+                <a class="nav-item nav-link" href="{% url 'CONSULTA_FIREBASE'%}">Consulta Vision</a>
+                <a class="nav-item nav-link" href="{% url 'TRABAJOS_TECNICA'%}">Trabajos Tecnica</a>s-->
+
+                <a class="nav-item nav-link" href="{% url 'LOGIN'%}">Inicio de sesion</a>                
+                <!--Pestañas interiores
+                <a class="nav-item nav-link" href="{% url 'PRODUCTOS'%}">Productos</a>
+                <a class="nav-item nav-link" href="{% url 'PERSONAL'%}">Personal</a>
+                <a class="nav-item nav-link" href="{% url 'CLIENTE'%}">Clientes</a>
+                <a class="nav-item nav-link" href="{% url 'PROVEEDOR'%}">Proveedor</a>
+
+                <a class="nav-item nav-link" href="{% url 'VENTAS'%}" >Ventas</a>
+                <a class="nav-item nav-link" href="{% url 'LOGOUT'%}">Cerrar Sesion</a>-->
+
+                <h1 class="titulo_cabecera">TIENDA DE ELECTRONICA</h1>
+                <img class="ImagEncabezado1" src="{% static 'imagenes/upeasistemas.png' %}" alt="Logo"/>  
+            </div>
+        </nav>
+        {% endif %}
+        <div class="container-fluid">
+            {% block cuerpo %}  {% endblock %}
+        </div>
+        
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous" ></script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"></script>
+    </body>
+    
+    <!--<footer>{%block pie%}{%endblock%}-->
+</html>

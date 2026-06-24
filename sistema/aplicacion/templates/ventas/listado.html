@@ -1,0 +1,63 @@
+{%  extends "base.html" %}
+{% load static %}
+{% block titulo %} adiciona productos {% endblock  %}
+
+{% block cuerpo%} 
+  
+<div class="container mt-4">
+   <h1 class="text-center mb-4">LISTADO DE VENTAS</h1>
+   {% if ventas %}
+      {% for venta in ventas %}
+        <div class="card mb-4">
+            <div class="card-header">
+               Venta #{{ venta.id }}
+            </div>
+            <div class="card-body">
+                <p><strong>Detalles de la Venta:</strong></p>
+                <p><strong>Numero de venta:</strong> {{ venta.id }}</p>
+                <p><strong>Fecha:</strong> {{ venta.fecha|date:"d/m/Y" }}</p>
+                <p><strong>Cliente:</strong> {{ venta.cliente_id.nombre }}</p>
+                <p><strong>Empleado:</strong> {{ venta.empleado_id.nombre }}</p>
+                <a href="{% url 'reporte_pdf_venta' venta.id %}" class="btn btn-primary">Generar PDF</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for detalle in venta.detalles.all %}
+                        <tr>
+                            <td>{{ detalle.id_prod.descripcion }}</td>
+                            <td>{{ detalle.cantidad }}</td>
+                            <td>{{ detalle.precio }} Bs</td>
+                            <td>{{ detalle.total }} Bs</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td>{{ venta.total_venta }} Bs</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+      {% endfor %}
+      <div class="text-end fs-5 fw-bold" text-primary>
+            Total de Ventas: {{ total_general }} Bs
+      </div>
+    {% else %}
+      <div class="alert alert-info text-center" role="alert">
+         No hay ventas registradas.
+      </div>
+   {% endif %}
+</div>
+
+{%endblock%} 

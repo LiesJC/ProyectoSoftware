@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Ventas{% endblock %}
+
+{% block cuerpo %}
+
+<input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+
+<div class="row">
+
+    <!-- COLUMNA DE VENTAS ABIERTAS CON MARGEN -->
+    <div class="col-md-2 border-end pe-4" style="max-height: 90vh; overflow-y:auto;">
+        <h5>Ventas Abiertas</h5>
+        <div id="ventas-lista" class="d-flex flex-column gap-2">
+            <button class="btn btn-primary btn-sm mb-2" onclick="nuevaVenta()">+ Nueva Venta</button>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div id="venta-activa-container">
+            <p class="text-center">Crea una nueva venta para empezar</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+let ventas = [];
+let ventaActivaId = null;
+const csrfToken = document.getElementById('csrf-token').value;
+
+// Guardar en localStorage
+function guardarVentasEnStorage() {
+    localStorage.setItem('ventasAbiertas', JSON.stringify(ventas));
+    localStorage.setItem('ventaActivaId', ventaActivaId);
+}
+
+// Cargar de localStorage
+function cargarVentasDeStorage() {
+    const ventasGuardadas = JSON.parse(localStorage.getItem('ventasAbiertas') || '[]');
+    const activa = parseInt(localStorage.getItem('ventaActivaId'));
+    if (ventasGuardadas.length) {
+        ventas = ventasGuardadas;
+        ventaActivaId = activa || ventas[0].id;
+        renderListaVentas();
+        renderVentaActiva();
+    }
+}
+window.addEventListener('load', cargarVentasDeStorage);
+
+// =========================
+// NUEVA VENTA CON NUMERO CONSECUTIVO
+// =========================
+function nuevaVenta() {
+    const id = Date.now();
+
+    // Obtener el último número de venta guardado o iniciar en 0
+    let ultimoNumero = parseInt(localStorage.getItem('ultimoNumeroVenta') || '0');
+    const numero = ultimoNumero + 1;
+    localStorage.setItem('ultimoNumeroVenta', numero); // Guardar para la próxima venta
+
+    // Primer empleado por defecto
+    const primerEmpleado = document.querySelector('select[name="empleado_id"] option');
+    const empleadoId = primerEmpleado ? primerEmpleado.value : null;
+    const empleadoNombre = primerEmpleado ? primerEmpleado.text : 'Sin Empleado';
+
+    const venta = {
+        id,
+        numeroVenta: numero,
+        carrito: [],
+        fecha: '{{ fecha_actual|date:"Y-m-d" }}',
+        cliente_id: null,
+        empleado_id: empleadoId,
+        empleadoNombre: empleadoNombre
+    };
+    ventas.push(venta);
+    ventaActivaId = id;
+    renderListaVentas();
+    renderVentaActiva();
+    guardarVentasEnStorage();
+}
+
+// =========================
+// RENDER LISTA DE VENTAS (tarjetas con botón eliminar)
+// =========================
+function renderListaVentas() {
+    const lista = document.getElementById('ventas-lista');
+    lista.innerHTML = `<button class="btn btn-primary btn-sm mb-2" onclick="nuevaVenta()">+ Nueva Venta</button>`;
+    
+    ventas.forEach(v => {
+        const div = document.createElement('div');
+        div.className = `card p-2 position-relative ${v.id === ventaActivaId ? 'border-success' : 'border-secondary'} text-center`;
+        div.style.cursor = "pointer";
+        div.style.backgroundColor = v.id === ventaActivaId ? "#d4edda" : "#f8f9fa";
+
+        div.innerHTML = `
+            <strong>Venta ${v.numeroVenta}</strong><br>
+            <small>${v.empleadoNombre || 'Sin Empleado'}</small>
+            <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" title="Eliminar Venta">X</button>
+        `;
+
+        // Seleccionar venta activa al hacer clic en el div
+        div.addEventListener('click', () => {
+            ventaActivaId = v.id;
+            renderVentaActiva();
+            renderListaVentas();
+            guardarVentasEnStorage();
+        });
+
+        // Botón eliminar
+        const btnEliminar = div.querySelector('button');
+        btnEliminar.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que se seleccione la venta al hacer clic en eliminar
+            if (confirm(`¿Eliminar la venta ${v.numeroVenta}?`)) {
+                ventas = ventas.filter(venta => venta.id !== v.id);
+                if (ventaActivaId === v.id) {
+                    ventaActivaId = ventas.length > 0 ? ventas[0].id : null;
+                }
+                renderListaVentas();
+                if (ventaActivaId) renderVentaActiva();
+                else document.getElementById('venta-activa-container').innerHTML = `<p class="text-center">Crea una nueva venta para empezar</p>`;
+                guardarVentasEnStorage();
+            }
+        });
+
+        lista.appendChild(div);
+    });
+}
+
+// =========================
+// RENDER VENTA ACTIVA
+// =========================
+function renderVentaActiva() {
+    if (!ventaActivaId) return;
+    const venta = ventas.find(v => v.id === ventaActivaId);
+    const container = document.getElementById('venta-activa-container');
+
+    container.innerHTML = `
+    <div class="card">
+        <div class="card-header">REGISTRO DE VENTA ${venta.numeroVenta}</div>
+        <form id="form-venta-${venta.id}" class="border p-4 rounded bg-light" method="POST" action="">
+            <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+            <input type="hidden" name="detalle_json" id="detalle_json-${venta.id}">
+
+            <a href="{% url 'listado_ventas' %}" target="_blank" class="btn btn-secondary mb-3">
+                Ver Ventas
+            </a>
+
+            <div class="row">
+                <div class="col-md-6 border-end pe-4">
+                    <h5 class="mb-3">Agregar Producto</h5>
+                    <input type="text" id="buscador-${venta.id}" class="form-control mb-3" placeholder="Buscar productos..." aria-label="Buscar productos">
+                    <div class="row" id="catalogo-productos-${venta.id}" style="max-height: 450px; overflow-y:auto;">
+                        {% for p in productos %}
+                        <div class="col-3 mb-3 producto-card" data-nombre="{{ p.descripcion|lower }}">
+                            <div class="card h-100 text-center p-2" style="cursor:pointer;">
+                                <img src="{{ p.imagen.url }}" class="img-fluid" style="height:90px; object-fit:contain;" alt="">
+                                <h6 class="mt-2">{{ p.descripcion }}</h6>
+                                <p class="text-success fw-bold">{{ p.precio }} Bs</p>
+                                <button type="button" class="btn btn-primary btn-sm"
+                                    onclick="agregarProducto(${venta.id}, {{ p.id }}, '{{ p.descripcion }}', {{ p.precio }})">
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-md-6 ps-4">
+                    <h5 class="mb-3">Datos de la Venta</h5>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label">Fecha</label>
+                            <input type="date" class="form-control" name="fecha" value="${venta.fecha}" onchange="setFecha(${venta.id}, this.value)" aria-label="...">
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Cliente</label>
+                            <select class="form-select" name="cliente_id" onchange="setCliente(${venta.id}, this.value)">
+                                {% for cliente in clientes %}
+                                <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Empleado</label>
+                            <select class="form-select" name="empleado_id" onchange="setEmpleado(${venta.id}, this.value, this.options[this.selectedIndex].text)">
+                                {% for empleado in empleados %}
+                                <option value="{{ empleado.id }}" ${venta.empleado_id == '{{ empleado.id }}' ? 'selected' : ''}>{{ empleado.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-4">Productos Registrados</h5>
+                    <table class="table table-bordered table-striped mt-2" style="table-layout: fixed; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="carrito-body-${venta.id}">
+                            <tr><td colspan="5" class="text-center">No hay productos en el carrito</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="fs-5 fw-bold text-end" id="total-carrito-${venta.id}">Total: 0 Bs</p>
+
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-success" onclick="registrarVenta(${venta.id})">Registrar Venta</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    `;
+
+    // Buscador
+    document.getElementById(`buscador-${venta.id}`).addEventListener("input", function() {
+        const texto = this.value.toLowerCase();
+        const cards = document.querySelectorAll(`#catalogo-productos-${venta.id} .producto-card`);
+        cards.forEach(card => {
+            const nombre = card.getAttribute("data-nombre");
+            card.style.display = nombre.includes(texto) ? "" : "none";
+        });
+    });
+
+    actualizarTabla(venta.id);
+}
+
+// =========================
+// CARRITO
+// =========================
+function agregarProducto(ventaId, id, descripcion, precio) {
+    const venta = ventas.find(v => v.id === ventaId);
+    if (venta.carrito.some(p => p.id === id)) { alert("Este producto ya está en el carrito"); return; }
+    venta.carrito.push({id, descripcion, cantidad:1, precio, total: precio});
+    actualizarTabla(ventaId);
+    guardarVentasEnStorage();
+}
+
+function actualizarTabla(ventaId) {
+    const venta = ventas.find(v => v.id === ventaId);
+    const tbody = document.getElementById(`carrito-body-${ventaId}`);
+    const totalLabel = document.getElementById(`total-carrito-${ventaId}`);
+    const detalleInput = document.getElementById(`detalle_json-${ventaId}`);
+
+    tbody.innerHTML = '';
+    if (venta.carrito.length === 0){
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center">No hay productos en el carrito</td></tr>`;
+        totalLabel.textContent = "Total: 0 Bs";
+        detalleInput.value = "";
+        return;
+    }
+
+    let total = 0;
+    venta.carrito.forEach((item, index) => {
+        total += item.total;
+        tbody.innerHTML += `
+        <tr>
+            <td>${item.descripcion}</td>
+            <td><input type="number" min="1" value="${item.cantidad}" class="form-control form-control-sm" onchange="modificarCantidad(${ventaId}, ${index}, this.value)" aria-label=" "></td>
+            <td>${item.precio.toFixed(2)} Bs</td>
+            <td>${item.total.toFixed(2)} Bs</td>
+            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarProducto(${ventaId}, ${index})">X</button></td>
+        </tr>`;
+    });
+
+    totalLabel.textContent = `Total: ${total.toFixed(2)} Bs`;
+    detalleInput.value = JSON.stringify(venta.carrito);
+    guardarVentasEnStorage();
+}
+
+function modificarCantidad(ventaId, index, cantidad) {
+    const venta = ventas.find(v => v.id === ventaId);
+    cantidad = parseInt(cantidad);
+    if (isNaN(cantidad) || cantidad < 1) { alert("Cantidad inválida"); actualizarTabla(ventaId); return; }
+    venta.carrito[index].cantidad = cantidad;
+    venta.carrito[index].total = cantidad * venta.carrito[index].precio;
+    actualizarTabla(ventaId);
+}
+
+function eliminarProducto(ventaId, index) {
+    const venta = ventas.find(v => v.id === ventaId);
+    venta.carrito.splice(index,1);
+    actualizarTabla(ventaId);
+}
+
+// =========================
+// REGISTRAR VENTA
+// =========================
+function registrarVenta(ventaId){
+    const venta = ventas.find(v => v.id===ventaId);
+    document.getElementById(`detalle_json-${ventaId}`).value = JSON.stringify(venta.carrito);
+
+    const form = document.getElementById(`form-venta-${ventaId}`);
+    form.submit();
+
+    ventas = ventas.filter(v => v.id !== ventaId);
+    if (ventaActivaId === ventaId) {
+        ventaActivaId = ventas.length > 0 ? ventas[0].id : null;
+    }
+
+    renderListaVentas();
+    if(ventaActivaId) renderVentaActiva();
+    else document.getElementById('venta-activa-container').innerHTML = `<p class="text-center">Crea una nueva venta para empezar</p>`;
+
+    guardarVentasEnStorage();
+}
+
+// =========================
+// SETTERS
+// =========================
+function setFecha(ventaId, valor){ ventas.find(v=>v.id===ventaId).fecha = valor; guardarVentasEnStorage(); }
+function setCliente(ventaId, valor){ ventas.find(v=>v.id===ventaId).cliente_id = valor; guardarVentasEnStorage(); }
+function setEmpleado(ventaId, valor, nombre){ 
+    const venta = ventas.find(v=>v.id===ventaId);
+    venta.empleado_id = valor; 
+    venta.empleadoNombre = nombre;
+    renderListaVentas(); // Actualiza el recuadro con nuevo empleado
+    guardarVentasEnStorage(); 
+}
+
+</script>
+
+{% endblock %}

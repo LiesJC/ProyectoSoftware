@@ -1,0 +1,80 @@
+/*ENCABEZADO*/
+header{
+    background-color: #3e5c9e;
+
+    padding: 0.5rem 0.5rem;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+#ImagEncabezado{
+    padding: 0rem 2rem;
+
+}
+h1{
+    color: white;
+    text-align: center;
+    font-family: "Verdana";
+    padding: 0px 10px;
+    font-size: 30px;
+}
+div{
+    align-items: center;
+    display: flex;
+}
+/*CONTENIDO*/
+body{
+    position: relative;
+    top: 120px;
+    background-color: white;
+    font-size: 20px;
+    padding: 0px 10px;
+}
+section{
+    border: 2px black outset;
+    border-radius: 5px;
+    margin: 5px;
+}
+#enlace{
+    background-color: #0b0546;
+    padding: 20px;
+}
+#ImagPrincipal{
+    padding: 0rem;
+    text-align: center;
+    display: block;
+    margin: 0 auto;
+}
+p{
+    color: black;
+    font-family: Garamond;
+    font-size: 20px;
+    padding: 0rem 2rem;
+    line-height: 0.8;
+}
+a{
+    padding: 2rem 2rem;
+}
+a:link{
+    color: #4f90d1;
+}
+a:visited{
+    color: blueviolet;
+}
+a:hover{
+    color: white;
+}
+/*PIE DE PAGINA*/
+footer{
+    background-color: #0b0546;
+    border-radius: 10px;
+    padding: 1rem 1rem;
+    bottom: 0px;
+    left: 0px;
+    width: 98%;
+}
+.textPie{
+    color: white;
+    left: 0px;
+}

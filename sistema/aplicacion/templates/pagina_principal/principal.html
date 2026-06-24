@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPRESION 3D</title>
+    <!--<link rel="stylesheet" href="{% static 'css/estilo.css' %}"/>-->
+
+</head>
+<body>
+    
+    
+
+
+    <header>    
+        <div>
+            <img id="ImagEncabezado" src="{% static 'imagenes/upea.png' %}" width="100" alt="Logo"/>
+            <h1>DESARROLLO DE IMPRESION 3D</h1>            
+        </div>        
+        
+        <nav class="navbar navbar-expand navbar-light bg-light">
+            <div class="nav navbar-nav">
+                <a class="nav-item nav-link active" href="#" aria-current="page"
+                    >Inicio<span class="visually-hidden"></span></a
+                >
+                <a class="nav-item nav-link" href="#">Productos</a>
+                <a class="nav-item nav-link" href="#">Clientes</a>
+                <a class="nav-item nav-link" href="#">Proveedores</a>
+                <a class="nav-item nav-link" href="#">Empleados</a>
+                <a class="nav-item nav-link" href="#">Ventas</a>
+                <a class="nav-item nav-link" href="#">Compras</a>
+                <a class="nav-item nav-link" href="#">Usuarios</a>
+
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <P class="texto">Pagina para el desarrollo e fabricacion de piezas por impresion 3D.</P>
+        <p class="texto">Innovacion sobre piezas en impresion 3D, desarrolla tus piezas con programadores expertos atravez de instrucciones sencillas.</p>
+        <p>Fabricacion de piezas desde cero con materiales de todo tipo "PETG,PET,ABS,PLA,etc"</p>
+        <p class="texto">Cursos y capacitaciones en un entorno didactico para desarrollar tu creatividad en impresion 3D</p>
+        <img id="ImagPrincipal" src="{% static 'imagenes/impresion2.jpg' %}" width="400" alt="Logo"/>
+    </section>
+    <section id="enlace">
+        <a target="_blank" href="https://es.wikipedia.org/wiki/Impresi%C3%B3n_3D">Informacion de piezas en 3D</a>
+        
+        <a target="_blank" href="">   Registrar nuevo usuario</a>
+    
+        <a target="_blank" href="">   Realizar compra </a>
+        
+        <a target="_blank" href="">   Informacion de la pagina</a>  
+        
+        <a target="_blank" href="">   Inicio personal</a>     
+    
+        <a target="_blank" href="">   Inicio usuario </a>     
+        <a target="_blank" href=""> </a>       
+    </section>
+    <footer>
+        <div>
+            <img id="ImagPrincipal" src="{% static 'imagenes/animImpresora.gif' %}" width="400" alt="Logo"/>
+            <a target= "_blank" href="mailto:jessecasasfist@hotmail.com">Correo electronico de referencia</a>
+            <p class= "textPie">Copyright 2025</p>
+            <p class= "textPie">Universidad Publica de El alto</p>
+        </div>
+    </footer>
+</body>
+</html>

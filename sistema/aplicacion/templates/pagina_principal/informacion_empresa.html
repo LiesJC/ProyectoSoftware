@@ -1,0 +1,33 @@
+{% extends  "baseg.html"%}
+{% load static %}
+
+{%block titulo%} ACERCA DE LA EMPRESA {%endblock%}
+{%block link%} <link rel="stylesheet" href="{% static 'css/informacion.css' %}"/> {%endblock%}
+{%block cuerpo%} 
+
+<div class="cuerpocentral">
+    <div class = "fila">
+        <img id="ImagPrincipal" src="{% static 'imagenes/logoelectronica1.jpg' %}" alt="Logo"/>
+        <div class="bloque-texto">
+        <P class="texto"><strong><br>Mision</br></strong></P>
+        <p class="texto">Brindar a nuestros clientes una experiencia de compra completa, cómoda y confiable, ofreciendo productos de calidad, precios competitivos y un servicio amable que satisfaga las necesidades del hogar y promueva el bienestar de la comunidad.</p>
+        <P class="texto"><strong><br>Vision</br></strong></P>
+        <p class="texto">Ser el supermercado líder y de referencia en la región, reconocido por su innovación, excelencia en el servicio y compromiso con el desarrollo sostenible, consolidando a SLAN como la mejor opción para las familias bolivianas.</p>
+        <p class="texto"><br><strong>Valores</strong></br></p>
+        <ul class="texto">
+            <li><strong>Calidad:</strong> Garantizamos productos nuevos y de excelente procedencia.</li>
+            <li><strong>Compromiso:</strong> Trabajamos con dedicación para superar las expectativas de nuestros clientes.</li>
+            <li><strong>Honestidad:</strong> Actuamos con transparencia y responsabilidad en todas nuestras operaciones.</li>
+            <li><strong>Innovación:</strong> Mejoramos constantemente nuestros procesos para ofrecer una experiencia moderna y eficiente.</li>
+            <li><strong>Trabajo en equipo:</strong> Fomentamos la colaboración y el respeto entre nuestros empleados y socios.</li>
+            <li><strong>Sostenibilidad:</strong> Promovemos prácticas responsables con el medio ambiente y la comunidad.</li>
+        </ul>
+        </div>
+    </div>
+</div>
+
+<footer>
+
+</footer>
+
+{%endblock%}

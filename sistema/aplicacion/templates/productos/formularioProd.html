@@ -1,0 +1,100 @@
+<form enctype = "multipart/form-data" method="POST">
+{% csrf_token %}
+<div class = "row">
+    <div class="col-md-6">
+        <div class ="mb-3">
+            <label for="" class="form-label">Descripcion</label>
+            <input
+            type = "text"
+            class = "form-control"
+            id = ""
+            name = "prod-descripcion"
+            value = "{{ prod.descripcion }}"
+            aria-decribedby="helpId"
+            placeholder = "Descripcion">
+        </div>
+        <div class ="mb-3">
+            <label for="" class="form-label">Marca</label>
+            <input
+            type = "text"
+            class = "form-control"
+            id = ""
+            name = "prod-marca"
+            value = "{{ prod.marca }}"
+            aria-decribedby="helpId"
+            placeholder = "Marca">
+        </div>
+        <div class ="mb-3">
+            <label for="" class="form-label">Procedencia</label>
+            <input
+            type = "text"
+            class = "form-control"
+            id = ""
+            name = "prod-procedencia"
+            value = "{{ prod.procedencia }}"
+            aria-decribedby="helpId"
+            placeholder = "Procedencia">
+        </div>
+        <div class ="mb-3">
+            <label for="" class="form-label">Cantidad</label>
+            <input
+            type = "number"
+            class = "form-control"
+            id = ""
+            name = "prod-cantidad"
+            value = "{{ prod.cantidad }}"
+            aria-decribedby="helpId"
+            placeholder = "Cantidad">
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <div class ="mb-3">
+            <label for="" class="form-label">Precio</label>
+            <input
+            type = "number"
+            class = "form-control"
+            step = "0.01"
+            id = ""
+            name = "prod-precio"
+            value = "{{ prod.precio }}"
+            aria-decribedby="helpId"
+            placeholder = "Precio">
+        </div>
+        <div class ="mb-3">
+            <label for="" class="form-label">StockMaximo</label>
+            <input
+            type = "number"
+            class = "form-control"
+            id = ""
+            name = "prod-stockmaximo"
+            value = "{{prod.stockmaximo}}"
+            aria-decribedby="helpId"
+            placeholder = "Stock Maximo">
+        </div>
+        <div class ="mb-3">
+            <label for="" class="form-label">StockMinimo</label>
+            <input
+            type = "number"
+            class = "form-control"
+            id = ""
+            name = "prod-stockminimo"                                    
+            value = "{{prod.stockminimo}}"
+            aria-decribedby="helpId"
+            placeholder = "Stock Minimo">                   <!--Colocar correctamente el nombre incluso con minusculas con su prefijo-->
+        </div>
+
+        <div class ="mb-3">
+            <label for="" class="form-label">Imagen</label>
+            <input
+            type = "file"
+            class = "form-control"
+            name = "prod-imagen"/>
+        </div> 
+    </div>            
+</div>
+
+    <button type="submit" class="btn btn-success" value="Guardar">Guardar</button>
+    <a href="{% url 'PRODUCTOS' %}" class="btn btn-secondary">Cancelar</a>
+
+</form>   

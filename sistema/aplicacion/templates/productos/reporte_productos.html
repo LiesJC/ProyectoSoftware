@@ -1,0 +1,118 @@
+{%  extends "base.html" %}
+{% load static %}
+{% block titulo %} REPORTE PRODUCTOS {% endblock  %}
+{%block link%} <link rel="stylesheet" href="{% static 'css/reportes.css' %}"/> {%endblock%}
+{% block cuerpo%} 
+ 
+     <div style="text-align: center; margin-bottom: 20px;">
+        <h2>REPORTE DE PRODUCTOS </h2>
+        <p>Catalogo de productos generado</p>
+        <p>Generado a fecha de : {{fecha}}</p>
+        <p>Empresa SLAN SRL.</p>
+    </div>
+    <table>
+        <thead>
+            <tr style="width: 80%; border-collapse: collapse; font-size: 11px; margin:0 auto ; table-layout: fixed; background-color: #7197ffff">
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 7%">ID</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 16%">PRODUCTO</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 12%">MARCA</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 16%">PROCEDENCIA</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 12%">CANTIDAD EN RESERVA</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 12%">STOCK EN TIENDA</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 12%">PRECIO UNITARIO</th>
+                <th style="border: 1px solid #000; 
+    padding: 3px;
+    font-family: Roboto;
+    font-size: 10px;
+    text-align: left;
+    width: 12%">CATEGORIA</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.id }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.descripcion }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.marca }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.procedencia }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.cantidad }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.stockmaximo }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;">{{ p.precio }}</td>
+                <td style="border: 1px solid #000; 
+    padding: 2px;
+    font-family: Roboto;
+    font-size: 8px;
+    text-align: left;
+    width: 10%">{{ p.categoria }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="contenedor_de_botones">
+    <a href="{% url 'REPORTE_PDF_PROD' %}" class ="btn btn-success boton_reporte">Descargar como PDF</a>
+    <a href = "{% url 'PRODUCTOS' %}" class ="btn btn-danger boton_reporte"> Cancelar </a>
+</div>
+{%endblock%}

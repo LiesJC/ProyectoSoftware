@@ -1,0 +1,159 @@
+
+
+.cuerpocentral{
+    background-color: #000000;
+    padding: 0;
+    border-radius: 0px;
+    width: 90%;
+    margin: 0 auto;                         /*Centra el contenedor por margen de 0 */
+    margin-bottom: 20px;
+}
+
+
+.contenedor_ofertas {
+  display: flex;             /* Activa flexbox */
+  flex-wrap: nowrap;         /* Evita que las ofertas bajen */
+  gap: 20px;                 /* Espacio entre ofertas */
+  overflow-x: auto;          /* Scroll horizontal si no caben */
+  padding: 10px;
+  -webkit-overflow-scrolling: touch; /* Para scroll suave en móviles */
+  width: 80%;
+  margin: 0 auto; 
+  border-color: #000000;
+  border-radius: 20px;
+  border-width: 10px;
+
+}
+
+.oferta{
+    background-color: #000000;
+    padding: 0;
+    border-radius: 10px;
+    width: 30%;
+    margin: 0 auto;                         /*Centra el contenedor por margen de 0 */
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid #000000; 
+}
+
+.oferta:hover {
+  border: 4px solid #ff0000;       /* Borde más grueso y color dorado */
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.7); /* Sombra brillante opcional */
+}
+
+.fila {
+    display: flex;
+    align-items: flex-start;  /* o center para centrar verticalmente */
+    gap: 30px;                /* espacio entre imagen y texto */
+    flex-wrap: wrap;          /* permite que se acomode en pantallas pequeñas */
+  }
+#ImagPrincipal{
+    width: 300px; 
+}
+  
+.titulo_Oferta{
+  text-align: center;
+  color: white;
+  font-family: Roboto;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.texto_Oferta{
+  text-align: center;
+  color: white;
+  font-family: Roboto;
+  font-size: 20px;
+}
+
+#ImagenOf1 {
+  width: 100%;                  /* Tamaño opcional */
+  height: 200px;                  /* Mantiene la proporción */
+  object-fit: cover;
+}
+
+.texto{
+    font-size: 16px;
+    font-family: 'Times New Roman';
+    color: white;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    text-align: justify;
+}
+  
+
+/*Pie de pagina*/
+footer {
+    background-color: #000000;
+    color:#171b4e;
+    text-align: center;
+    padding: 0px 0;
+    margin-bottom: 0px;
+    flex: 1
+
+}
+/*contenedor de listas de footer*/
+.contenedor-listas {
+    display: flex;                   /* organiza las listas en fila */
+    justify-content: space-between;  /* espacio uniforme entre listas */
+    max-width: 1200px;
+    margin: 0;                     
+    padding-left: 40px;              /* espacio izquierdo */
+    gap: 20px;                       /* espacio entre listas */
+}
+
+.lista-referencias{
+    list-style: none;             /* quita viñetas */
+}
+.lista-referencias a {
+    padding: 0;
+    font-family: 'Roboto', sans-serif; /* ejemplo de fuente */
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+    padding: 4px;
+    font-size: 12px;
+    text-align: left;
+}
+
+.lista-referencias a:hover {
+    text-decoration: underline;
+}
+h3{
+    font-size: 16px;
+    color: #939393;
+    font-weight: bold;
+}
+
+
+/*Deslizador en CSS*/
+.slider {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.slides {
+  display: flex;
+  width: 300%;
+  animation: slide 10s infinite;
+}
+
+.slides img {
+  width: 16.6666%;       /* 1/3 del contenedor total (3 imágenes) */
+  height: 100%;          /* altura igual al slider */
+  object-fit: cover;     /* llena el contenedor recortando proporcionalmente */
+  object-position: center; /* centra la parte visible de la imagen */
+}
+
+@keyframes slide {
+  0% { transform: translateX(0%); }
+  33% { transform: translateX(-16.666%); }
+  100% { transform: translateX(0%); }
+}

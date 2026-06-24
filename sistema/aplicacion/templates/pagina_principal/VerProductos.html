@@ -1,0 +1,54 @@
+{% extends  "baseg.html"%}
+{% load static %}
+
+{%block titulo%} SISTEMA PARA IMPRESION 3D {%endblock%}
+{%block link%} <link rel="stylesheet" href="{% static 'css/config.css' %}"/> {%endblock%}
+{%block cuerpo%} 
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Listado de Productos</h2>
+
+    <!-- Filtros combinados: buscador y selector de categoría -->
+    <form method="GET" class="mb-4 d-flex justify-content-center">
+        <!-- Buscador -->
+        <input type="text" name="buscar" class="form-control w-25 me-2" placeholder="Buscar por descripción..." value="{{ buscar }}">
+
+        <!-- Selector de categoría -->
+        <select name="categoria" class="form-select w-25 me-2">
+            <option value="Todos" {% if categoria_seleccionada == "Todos" %}selected{% endif %}>-- Todas las categorías --</option>
+            {% for cat in categorias %}
+                <option value="{{ cat }}" {% if cat == categoria_seleccionada %}selected{% endif %}>
+                    {{ cat }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+
+    <!-- Cuadrícula de productos -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for producto in productos %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.descripcion }}" style="height:200px; object-fit:cover;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ producto.descripcion }}</h5>
+                    <p class="card-text">
+                        <strong>Marca:</strong> {{ producto.marca }} <br>
+                        <strong>Categoría:</strong> {{ producto.categoria }} <br>
+                        <strong>Procedencia:</strong> {{ producto.procedencia }}
+                    </p>
+                    <p class="text-success fw-bold">Bs {{ producto.precio }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No se encontraron productos con esos filtros.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{%endblock%}

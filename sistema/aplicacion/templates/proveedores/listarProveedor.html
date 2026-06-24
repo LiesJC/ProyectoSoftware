@@ -1,0 +1,79 @@
+
+{% extends  "base.html"%}
+{% load static %}
+{%block titulo%} LISTA DE PROVEEDORES {%endblock%}
+
+{%block cuerpo%} 
+<div class="card">
+    <div class="card-header">
+        <a
+            name="NuevoProv"
+            id=""
+            class="btn btn-primary"
+            href="{% url 'AÑADIR_PROVEEDOR'%}"
+            role="button"
+            >Nuevo Proveedor</a>
+        <a
+            name="impresion"
+            id=""
+            class="btn btn-success"
+            href="{% url 'REPORTE_VISTA_PROV'%}"
+            role="button"
+            >Imprimir Proveedores</a>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">LISTA DE PRODUCTOS</h4>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Codigo</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Direccion</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Imagen</th>
+                        <th scope="col">Pagina Web</th>
+                        <th scope="col">Configuracion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for proveedor in proveedores%}
+                    <tr class="">
+                        <td>{{proveedor.id}}</td>
+                        <td>{{proveedor.nombre}}</td>
+                        <td>{{proveedor.telefono}}</td>
+                        <td>{{proveedor.direccion}}</td>
+                        <td>{{proveedor.correo}}</td>
+                        <td><img src= {{proveedor.imagen.url}} alt="" width="60" height="60"></td>
+                        <td>{{proveedor.pagina}}</td>
+                        <td>
+                            <a
+                                name="Eliminar1"
+                                id=""
+                                class="btn btn-danger"
+                                href="{% url 'ELIMINAR_PROVEEDOR' proveedor.id %}"
+                                role="button"
+                                >Eliminar</a
+                            >
+                            <a
+                                name="Modificar1"
+                                id=""
+                                class="btn btn-warning"
+                                href="{% url 'MODIFICAR_PROVEEDOR' proveedor.id %}"
+                                role="button"
+                                >Modificar</a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        SISTEMA DE INVENTARIOS 
+    </div>
+</div>
+{%endblock%}
+
+

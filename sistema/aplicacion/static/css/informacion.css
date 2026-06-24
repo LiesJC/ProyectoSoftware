@@ -1,0 +1,35 @@
+.cuerpocentral {
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center;    /* Centra verticalmente */
+    margin-top: 40px;
+}
+
+.fila {
+    display: flex;
+    align-items: flex-start; /* Alinea la imagen y el texto arriba */
+    gap: 30px; /* Espacio entre la imagen y el texto */
+    max-width: 1000px; /* Limita el ancho del bloque total */
+}
+
+#ImagPrincipal {
+    width: 250px; /* Tamaño de la imagen */
+    height: auto;
+    border-radius: 10px;
+}
+
+.bloque-texto {
+    flex: 1; /* El texto ocupa el espacio restante */
+    text-align: justify;
+}
+
+.texto {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+ul.texto {
+    padding-left: 20px; /* sangría para los ítems */
+}

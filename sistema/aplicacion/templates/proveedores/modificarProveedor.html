@@ -1,0 +1,14 @@
+{% extends  "base.html"%}
+{% load static %}
+{%block titulo%} MODIFICAR DE PRODUCTOS {%endblock%}
+{%block link%} <link rel="stylesheet" href="{% static 'css/formulario.css' %}"/> {%endblock%}
+{%block cuerpo%} 
+<div class="card">
+    <div class="card-header">
+        MODIFICACION DE CLIENTES
+    </div>
+    <div class="card-body">
+        {%include 'proveedores/formProveedor.html' %}
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %} Trabajos Técnicos {% endblock %}
+
+{% block link %}
+<style>
+body { overflow-x: hidden; }
+
+.panel {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    height: calc(100vh - 120px);
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.proyecto-card {
+    background: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+</style>
+{% endblock %}
+
+{% block cuerpo %}
+
+<form method="POST" id="formProyectos">
+{% csrf_token %}
+
+<div class="container-fluid mt-4">
+<div class="row g-3">
+
+<!-- 1️⃣ EMPLEADO / CLIENTE -->
+<div class="col-3">
+<div class="panel">
+<h6>Empleado</h6>
+<select class="form-select mb-3" name="empleado" id="empleado" required>
+    <option value="">Seleccione</option>
+    {% for e in empleados %}
+    <option value="{{ e.id }}">{{ e.nombre }} {{ e.a_paterno }}</option>
+    {% endfor %}
+</select>
+
+<h6>Cliente</h6>
+<select class="form-select" name="cliente" id="cliente" required>
+    <option value="">Seleccione</option>
+    {% for c in clientes %}
+    <option value="{{ c.id }}">{{ c.nombre }}</option>
+    {% endfor %}
+</select>
+</div>
+</div>
+
+<!-- 2️⃣ DATOS DEL DETALLE -->
+<div class="col-3">
+<div class="panel d-flex flex-column">
+<h6>Detalle del Proyecto</h6>
+
+<input class="form-control mb-2" id="categoria" placeholder="Categoría">
+<textarea class="form-control mb-2" id="especificacion" placeholder="Especificación"></textarea>
+
+<input type="datetime-local" class="form-control mb-2" id="fecha_coordinacion">
+<input type="datetime-local" class="form-control mb-2" id="fecha_entrega">
+
+<button type="button" class="btn btn-success mt-auto" onclick="agregarDetalle()">
+Agregar
+</button>
+</div>
+</div>
+
+<!-- 3️⃣ DETALLES AGREGADOS -->
+<div class="col-3">
+<div class="panel">
+<h6>Detalles agregados</h6>
+
+<div id="listaDetalles"></div>
+
+<button type="submit" class="btn btn-primary w-100 mt-2">
+Registrar
+</button>
+</div>
+</div>
+
+<!-- 4️⃣ PANEL VACÍO -->
+<div class="col-3">
+<div class="panel"></div>
+</div>
+
+</div>
+</div>
+
+<input type="hidden" name="proyectos_data" id="proyectos_data">
+</form>
+
+<script>
+let detalles = [];
+
+// FECHA Y HORA ACTUAL
+function setFechaActual() {
+    const now = new Date().toISOString().slice(0,16);
+    document.getElementById("fecha_coordinacion").value = now;
+    document.getElementById("fecha_entrega").value = now;
+}
+
+window.onload = setFechaActual;
+
+// AGREGAR DETALLE
+function agregarDetalle() {
+
+    const categoria = document.getElementById("categoria").value;
+    const especificacion = document.getElementById("especificacion").value;
+    const fechaC = document.getElementById("fecha_coordinacion").value;
+    const fechaE = document.getElementById("fecha_entrega").value;
+
+    if (!categoria || !fechaC || !fechaE) {
+        alert("Complete todos los campos");
+        return;
+    }
+
+    detalles.push({
+        categoria,
+        especificacion,
+        fecha_coordinacion: fechaC,
+        fecha_entrega: fechaE
+    });
+
+    renderDetalles();
+
+    document.getElementById("categoria").value = "";
+    document.getElementById("especificacion").value = "";
+    setFechaActual();
+}
+
+// MOSTRAR DETALLES
+function renderDetalles() {
+    const cont = document.getElementById("listaDetalles");
+    cont.innerHTML = "";
+
+    detalles.forEach((d, i) => {
+        cont.innerHTML += `
+        <div class="proyecto-card">
+            <strong>Detalle ${i+1}</strong><br>
+            <b>${d.categoria}</b><br>
+            ${d.especificacion}<br>
+            Coord: ${d.fecha_coordinacion}<br>
+            Entrega: ${d.fecha_entrega}
+        </div>`;
+    });
+
+    document.getElementById("proyectos_data").value = JSON.stringify(detalles);
+}
+</script>
+
+{% endblock %}

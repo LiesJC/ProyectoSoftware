@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Ventas{% endblock %}
+
+{% block cuerpo %}
+
+<div class="card">
+    <div class="card-header">REGISTRO DE VENTAS</div>
+
+    <form method="POST" action="" id="form-ventas" class="border p-4 rounded bg-light">
+        {% csrf_token %}
+
+        <a href="{% url 'listado_ventas' %}" target="_blank" class="btn btn-secondary mb-3">
+            Ver Ventas
+        </a>
+
+        <div class="row">
+
+            <!-- COLUMNA IZQUIERDA -->
+            <div class="col-md-6 border-end pe-4">
+
+                <h5 class="mb-3">Agregar Producto</h5>
+
+                <!-- BUSCADOR -->
+                <div class="mb-3">
+                    <input type="text" id="buscador" class="form-control" placeholder="Buscar productos..." aria-label="Buscar productos">
+                </div>
+
+                <!-- CATÁLOGO -->
+                <div class="row" id="catalogo-productos" style="max-height: 450px; overflow-y: auto;">
+                    {% for p in productos %}
+                    <div class="col-3 mb-3 producto-card" data-nombre="{{ p.descripcion|lower }}">
+                        <div class="card h-100 text-center p-2" style="cursor:pointer;">
+                            <img src="{{ p.imagen.url }}" class="img-fluid" style="height:90px; object-fit:contain;">
+                            <h6 class="mt-2">{{ p.descripcion }}</h6>
+                            <p class="text-success fw-bold">{{ p.precio }} Bs</p>
+
+                            <button type="button" class="btn btn-primary btn-sm"
+                                onclick="agregarDesdeCatalogo({{ p.id }}, '{{ p.descripcion }}', {{ p.precio }})">
+                                Agregar
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA -->
+            <div class="col-md-6 ps-4">
+
+                <h5 class="mb-3">Datos de la Venta</h5>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha"
+                               value="{{ fecha_actual|date:'Y-m-d' }}" required>
+                    </div>
+
+                    <div class="col">
+                        <label class="form-label">Cliente</label>
+                        <select id="cliente-select" name="cliente_id" class="form-select">
+                            {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col">
+                        <label class="form-label">Empleado</label>
+                        <select id="empleado-select" name="empleado_id" class="form-select">
+                            {% for empleado in empleados %}
+                            <option value="{{ empleado.id }}">{{ empleado.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Productos Registrados</h5>
+
+                <table class="table table-bordered table-striped mt-2" style="table-layout: fixed; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="carrito-body">
+                        <tr><td colspan="5" class="text-center">No hay productos en el carrito</td></tr>
+                    </tbody>
+                </table>
+
+                <p class="fs-5 fw-bold text-end" id="total-carrito">Total: 0 Bs</p>
+
+                <input type="hidden" name="detalle_json" id="detalle_json">
+
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-success">Registrar Venta</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<!-- ================== SCRIPTS ================== -->
+
+<script>
+
+const carrito = [];
+const tablaBody = document.getElementById('carrito-body');
+const totalLabel = document.getElementById('total-carrito');
+
+
+// =============================
+// BUSCADOR
+// =============================
+document.getElementById("buscador").addEventListener("input", function () {
+    const texto = this.value.toLowerCase();
+    const cards = document.querySelectorAll(".producto-card");
+
+    cards.forEach(card => {
+        const nombre = card.getAttribute("data-nombre");
+        card.style.display = nombre.includes(texto) ? "" : "none";
+    });
+});
+
+
+// =============================
+// AGREGAR DESDE CATÁLOGO
+// =============================
+function agregarDesdeCatalogo(id, descripcion, precio) {
+
+    if (carrito.some(p => p.id == id)) {
+        alert("Este producto ya está en el carrito");
+        return;
+    }
+
+    const item = {
+        id,
+        descripcion,
+        cantidad: 1,
+        precio,
+        total: precio
+    };
+
+    carrito.push(item);
+    actualizarTabla();
+}
+
+
+// =============================
+// ACTUALIZAR TABLA
+// =============================
+function actualizarTabla() {
+
+    tablaBody.innerHTML = '';
+
+    if (carrito.length === 0) {
+        tablaBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center">No hay productos en el carrito</td>
+            </tr>
+        `;
+        totalLabel.textContent = "Total: 0 Bs";
+        return;
+    }
+
+    let totalCarrito = 0;
+
+    carrito.forEach((item, index) => {
+
+        totalCarrito += item.total;
+
+        tablaBody.innerHTML += `
+            <tr>
+                <td>${item.descripcion}</td>
+
+                <td>
+                    <input type="number" min="1" value="${item.cantidad}"
+                        class="form-control form-control-sm"
+                        onchange="modificarCantidad(${index}, this.value)">
+                </td>
+
+                <td>${item.precio.toFixed(2)} Bs</td>
+
+                <td>${item.total.toFixed(2)} Bs</td>
+
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm"
+                        onclick="eliminarVenta(${index})">X</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    totalLabel.textContent = `Total: ${totalCarrito.toFixed(2)} Bs`;
+}
+
+
+// =============================
+// MODIFICAR CANTIDAD
+// =============================
+function modificarCantidad(index, nuevaCantidad) {
+
+    nuevaCantidad = parseInt(nuevaCantidad);
+
+    if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
+        alert("Cantidad inválida");
+        actualizarTabla();
+        return;
+    }
+
+    carrito[index].cantidad = nuevaCantidad;
+    carrito[index].total = carrito[index].precio * nuevaCantidad;
+
+    actualizarTabla();
+}
+
+
+// =============================
+// ELIMINAR PRODUCTO
+// =============================
+function eliminarVenta(index) {
+    carrito.splice(index, 1);
+    actualizarTabla();
+}
+
+
+// =============================
+// ENVIAR JSON AL FORMULARIO
+// =============================
+document.getElementById("form-ventas").addEventListener("submit", function () {
+    document.getElementById("detalle_json").value = JSON.stringify(carrito);
+});
+
+</script>
+
+{% endblock %}

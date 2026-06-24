@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Ventas{% endblock %}
+
+{% block cuerpo %}
+<div class="card">
+    <div class="card-header">REGISTRO DE VENTAS</div>
+    <form method="POST" action="" id="form-ventas" class="border p-4 rounded bg-light">
+        {% csrf_token %}
+        <a href="{% url 'listado_ventas' %}" target="_blank" class="btn btn-secondary mb-3">Ver Ventas</a>
+
+        <div class="row mb-3">
+            <div class="col mb-4">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input id="fecha" type="date" class="form-control" id="fecha" name="fecha" value="{{ fecha_actual|date:'Y-m-d' }}" required>
+            </div>
+            <div class="col mb-4">
+                <label for="cliente-select" class="form-label">Cliente</label>
+                <select id="cliente-select" name="cliente_id" class="form-select">
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col mb-4">
+                <label for="empleado-select" class="form-label">Empleado</label>
+                <select id="empleado-select" name="empleado_id" class="form-select">
+                    {% for empleado in empleados %}
+                        <option value="{{ empleado.id }}">{{ empleado.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label class="form-label">Producto</label>
+                <select id="producto-select" class="form-select">
+                    {% for producto in productos %}
+                        <option value="{{ producto.id }}" data-precio="{{ producto.precio }}">
+                            {{ producto.descripcion }} - {{ producto.precio }} Bs
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">Cantidad</label>
+                <input type="number" class="form-control" id="cantidad" min="1" value="1">
+            </div>
+            <div class="col">
+                <label class="form-label">Precio</label>
+                <input type="text" id="precio" class="form-control" readonly>
+            </div>
+            <div class="col">
+                <label class="form-label">Total</label>
+                <input type="text" id="total" class="form-control" readonly>
+            </div>
+            <div class="col d-grid align-items-end">
+                <button type="button" class="btn btn-primary" onclick="agregarVenta()">Agregar Venta</button>
+            </div>
+        </div>
+
+        <input type="hidden" name="detalle_json" id="detalle_json">
+
+        <div class="mt-4">
+            <h5>Ventas Registradas</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="carrito-body">
+                    <tr><td colspan="5" class="text-center">No hay productos en el carrito</td></tr>
+                </tbody>
+            </table>
+            <p class="fs-5 fw-bold text-end" id="total-carrito">Total: 0 Bs</p>
+        </div>
+
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-success">Registrar Venta</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const carrito = [];
+    const tablaBody = document.getElementById('carrito-body');
+    const fecha = document.getElementById('fecha');
+    const totalLabel = document.getElementById('total-carrito');
+    const precioInput = document.getElementById('precio');
+    const cantidadInput = document.getElementById('cantidad');
+    const totalInput = document.getElementById('total');
+    const productoSelect = document.getElementById('producto-select');
+
+    productoSelect.addEventListener('change', function() {
+        const selectedOption = productoSelect.options[productoSelect.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        precioInput.value = precio;
+        calcularTotal();
+    });
+
+    cantidadInput.addEventListener('input', calcularTotal);
+
+    function calcularTotal() {
+        const precio = parseFloat(precioInput.value) || 0;
+        const cantidad = parseInt(cantidadInput.value) || 0;
+        const total = precio * cantidad;
+        totalInput.value = total.toFixed(2);
+    }
+
+    function agregarVenta() {
+        const prodId = productoSelect.value;
+        const descripcion = productoSelect.options[productoSelect.selectedIndex].text;
+        const cantidad = parseInt(cantidadInput.value);
+        const precio = parseFloat(precioInput.value);
+        const total = parseFloat(totalInput.value);
+
+        if (cantidad <= 0 || isNaN(precio) || isNaN(total)) {
+            alert('Por favor, ingrese una cantidad válida y asegúrese de que el precio sea un número.');
+            return;
+        }
+
+        const existente = carrito.find(item => item.id === prodId);
+        if (existente) {
+            alert('El producto ya está en el carrito.');
+            return;
+        }
+
+        carrito.push({ id:prodId, descripcion, cantidad, precio, total });
+        actualizarTabla();
+        cantidadInput.value = 1;
+        precioInput.value = '';
+        totalInput.value = '';
+        actualizaTotalCarrito();
+    }
+    
+function actualizarTabla() {
+    tablaBody.innerHTML = '';
+    let totalCarrito = 0;
+
+    carrito.forEach((item, index) => {
+        totalCarrito += item.total;
+        tablaBody.innerHTML += `
+            <tr>
+                <td>${item.descripcion}</td>
+                <td>${item.cantidad}</td>
+                <td>${item.precio.toFixed(2)} Bs</td>
+                <td>${item.total.toFixed(2)} Bs</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarVenta(${index})">Eliminar</button>
+                </td>
+            </tr>
+        `;
+    });
+
+    if (carrito.length === 0) {
+        tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay productos en el carrito</td></tr>';
+    }
+
+    totalLabel.textContent = `Total: ${totalCarrito.toFixed(2)} Bs`;
+    document.getElementById("form-ventas").addEventListener("submit", function() {
+    document.getElementById("detalle_json").value = JSON.stringify(carrito);
+});
+
+}
+    function eliminarVenta(index) {
+        carrito.splice(index, 1);
+        actualizarTabla();
+        actualizaTotalCarrito();
+    }
+
+    function actualizaTotalCarrito() {
+        const total = carrito.reduce((sum, item) => sum + item.total, 0);
+        totalLabel.textContent = `Total: ${total.toFixed(2)} Bs`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const selectedOption = productoSelect.options[productoSelect.selectedIndex];
+        const precio = selectedOption.getAttribute('data-precio');
+        precioInput.value = precio;
+        calcularTotal();
+    });
+</script>
+{% endblock %}

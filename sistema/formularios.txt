@@ -1,0 +1,239 @@
+        <form enctype = "multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class = "row">
+            <div class="col-md-6">
+                <div class ="mb-3">
+                    <label for="" class="form-label">Nombre</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "pers-nombre"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Nombre">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Apellido Paterno</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "pers-a_paterno"
+                    value = ""
+                    aria-decribedby="helpId"
+                    autocomplete="family-name"
+                    placeholder = "Apellido paterno">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Apellido Materno</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "pers-a_materno"
+                    value = ""
+                    autocomplete="additional-name"
+                    aria-decribedby="helpId"
+                    placeholder = "Apellido Materno">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class ="mb-3">
+                    <label for="" class="form-label">Telefono</label>
+                    <input
+                    type = "number"
+                    class = "form-control"
+                    id = ""
+                    name = "pers-telefono"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Cantidad">
+                </div>
+               <div class ="mb-3">
+                    <label for="" class="form-label">Direccion</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "pers-direccion"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Direccion Domiciliaria">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Correo</label>
+                    <input
+                    type = "email"
+                    class = "form-control"
+                    id = ""
+                    name = "pers-correo"
+                    value = ""
+                    aria-decribedby="helpId"
+                    autocomplete="email"
+                    placeholder = "Correo Electronico">
+                </div>           
+            </div>
+        </div>
+            <button type="submit" class="btn btn-success" value="Guardar">Guardar</button>
+            <a href="{% url 'PRODUCTOS' %}" class="btn btn-secondary">Cancelar</a>
+        
+        </form>  
+
+                <form enctype = "multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class = "row">
+            <div class="col-md-6">
+                <div class ="mb-3">
+                    <label for="" class="form-label">Nombre</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "cliente-nombre"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Nombre">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Apellido Paterno</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "cliente-a_paterno"
+                    value = ""
+                    aria-decribedby="helpId"
+                    autocomplete="family-name"
+                    placeholder = "Apellido paterno">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Apellido Materno</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "cliente-a_materno"
+                    value = ""
+                    autocomplete="additional-name"
+                    aria-decribedby="helpId"
+                    placeholder = "Apellido Materno">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class ="mb-3">
+                    <label for="" class="form-label">Telefono</label>
+                    <input
+                    type = "number"
+                    class = "form-control"
+                    id = ""
+                    name = "cliente-telefono"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Telefono">
+                </div>
+               <div class ="mb-3">
+                    <label for="" class="form-label">NIT</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "cliente-nit"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "NIT">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Correo</label>
+                    <input
+                    type = "email"
+                    class = "form-control"
+                    id = ""
+                    name = "cliente-correo"
+                    value = ""
+                    aria-decribedby="helpId"
+                    autocomplete="email"
+                    placeholder = "Correo Electronico">
+                </div>           
+            </div>
+        </div>
+            <button type="submit" class="btn btn-success" value="Guardar">Guardar</button>
+            <a href="{% url 'PRODUCTOS' %}" class="btn btn-secondary">Cancelar</a>
+        
+        </form> 
+
+                <form enctype = "multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class = "row">
+            <div class="col-md-6">
+                <div class ="mb-3">
+                    <label for="" class="form-label">Nombre</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "prov-nombre"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Nombre">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Telefono</label>
+                    <input
+                    type = "number"
+                    class = "form-control"
+                    id = ""
+                    name = "prov-telefono"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Telefono">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Direccion</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "prov-direccion"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Direccion">
+                </div>
+            </div>
+            <div class="col-md-6">
+               <div class ="mb-3">
+                    <label for="" class="form-label">Pagina Web</label>
+                    <input
+                    type = "text"
+                    class = "form-control"
+                    id = ""
+                    name = "prov-pagina"
+                    value = ""
+                    aria-decribedby="helpId"
+                    placeholder = "Pagina Web">
+                </div>
+                <div class ="mb-3">
+                    <label for="" class="form-label">Correo</label>
+                    <input
+                    type = "email"
+                    class = "form-control"
+                    id = ""
+                    name = "prov-correo"
+                    value = ""
+                    aria-decribedby="helpId"
+                    autocomplete="email"
+                    placeholder = "Correo Electronico">
+                </div>    
+                <div class ="mb-3">
+                    <label for="" class="form-label">Imagen</label>
+                    <input
+                    type = "file"
+                    class = "form-control"
+                    name = "prov-imagen"/>
+                </div>        
+            </div>
+        </div>
+            <button type="submit" class="btn btn-success" value="Guardar">Guardar</button>
+            <a href="{% url 'PROVEEDOR' %}" class="btn btn-secondary">Cancelar</a>
+        
+        </form>  

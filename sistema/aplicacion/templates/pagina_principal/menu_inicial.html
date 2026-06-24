@@ -1,0 +1,104 @@
+{% extends  "baseg.html"%}
+{% load static %}
+
+{%block titulo%} SISTEMA DE CONTROL ELECTRONICO {%endblock%}
+{%block link%} <link rel="stylesheet" href="{% static 'css/config.css' %}"/> {%endblock%}
+{%block cuerpo%} 
+
+<div class="slider">
+  <div class="slides">
+    <img src="{% static 'imagenes/electronica1.jpg' %}" alt="Imagen 1">
+    <img src="{% static 'imagenes/electronica2.jpg' %}" alt="Imagen 2">
+    <img src="{% static 'imagenes/electronica3.jpg' %}" alt="Imagen 3">
+  </div>
+</div>
+
+<div class="cuerpocentral">
+    <div class = "fila">
+        <img id="ImagPrincipal" src="{% static 'imagenes/logoelectronica1.jpg' %}" alt="Logo"/>
+        <div class="bloque-texto">
+        <P class="texto"><br>Bienvenido, quieren comprar un elementos electronicos este es su lugar.</br></P>
+        <p class="texto">Aqui podra encontrar todo lo que usted necesita.</p>
+        <p class="texto">Desde componentes pasivos hasta maquina electronicas.</p>
+        <p class="texto">Cualquier duda no dude hablarlo con nuestro personal capacitado.</p>
+        </div>
+    </div>
+</div>
+<div class="contenedor_ofertas">
+    <div class="oferta">
+    <P class="titulo_Oferta">OFERTA</P>
+    <img id="ImagenOf1" src="{% static 'imagenes/animImpresora.gif' %}" alt="ImagenRot">
+
+      <P class="texto_Oferta">Impresora 3D "Genius PRO"</P>
+      <P class="texto_Oferta">PRECIO DE : 4000 Bs</P>
+    </div>
+    <div class="oferta">
+    <P class="titulo_Oferta">OFERTA</P>
+      <img id="ImagenOf1" src = "{% static 'imagenes/resistencia.jpg' %}" alt="ImagenRot" >
+      <P class="texto_Oferta">Resistencia variada</P>
+      <P class="texto_Oferta">PRECIO DE : 50ctv </P>
+    </div>
+        <div class="oferta">
+    <P class="titulo_Oferta">OFERTA</P>
+      <img id="ImagenOf1" src = "{% static 'imagenes/osciloscopio.gif' %}" alt="ImagenRot">
+      <P class="texto_Oferta">Osciloscopio BT5203</P>
+      <P class="texto_Oferta">PRECIO DE : 3000 Bs</P>
+    </div>
+        <div class="oferta">
+    <P class="titulo_Oferta">OFERTA</P>
+      <img id="ImagenOf1" src = "{% static 'imagenes/fuentealimentacion.jpg' %}" alt="ImagenRot">
+      <P class="texto_Oferta">Fuente de alimentacion</P>
+      <P class="texto_Oferta">PRECIO DE : 110 Bs </P>
+    </div>
+      <div class="oferta">
+    <P class="titulo_Oferta">OFERTA</P>
+      <img id="ImagenOf1" src = "{% static 'imagenes/capacitor.jpg' %}" alt="ImagenRot">
+      <P class="texto_Oferta">Capacitor electrolitico</P>
+      <P class="texto_Oferta">PRECIO DE : 1 Bs</P>
+    </div>
+</div>
+
+
+<footer>
+<div class="piepagina">
+<div class="contenedor-listas">
+  <ul class="lista-referencias">
+    <li><h3>Referencia de Productos</h3></li>
+    <li><a href="#">Pasivos</a></li>
+    <li><a href="#">Activos</a></li>
+    <li><a href="#">Microcontroladores</a></li>
+    <li><a href="#">Mquinas</a></li>
+    <li><a href="#">Servicios</a></li>
+  </ul>
+
+  <ul class="lista-referencias">
+    <li><h3>Contactos</h3></li>
+    <li><a href="#">Contactanos</a></li>
+    <li><a href="#">Correo Referencia</a></li>
+    <li><a href="#">Contacto telefonico</a></li>
+    <li><a href="#">Facebook</a></li>
+    <li><a href="#">Youtube</a></li>
+  </ul>
+
+  <ul class="lista-referencias">
+    <li><h3>Acerca de la empresa</h3></li>
+    <li><a href="#">Informacion publica</a></li>
+    <li><a href="#">Sobre nosotros</a></li>
+    <li><a href="#">Ubicacion</a></li>
+    <li><a href="#">Sucursales</a></li>
+    <li><a href="#">Pedidos</a></li>
+  </ul>
+
+  <ul class="lista-referencias">
+    <li><h3>Alianzas</h3></li>
+    <li><a href="#">Tienda1</a></li>
+    <li><a href="#">Tienda2</a></li>
+    <li><a href="#">Tienda3</a></li>
+    <li><a href="#">Tienda4</a></li>
+    <li><a href="#">Tienda5</a></li>
+  </ul>
+</div>
+</div>
+</footer>
+
+{%endblock%}

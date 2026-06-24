@@ -1,0 +1,16 @@
+{%  extends "base.html" %}
+{% load static %}
+{% block titulo %} venta exitosa {% endblock  %}
+
+{% block cuerpo%} 
+  
+<div class="container mt-4">
+    <div class="alert alert-success text-center" role="alert">
+        Venta Exitosa
+    </div>
+    <p>Numero de Venta: {{ venta_id }}</p>
+    <a href="{% url 'VENTAS'   %}" class="btn btn-primary">Volver a Ventas</a>
+  
+</div>
+    
+{%endblock%} 

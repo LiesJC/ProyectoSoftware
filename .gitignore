@@ -1,0 +1,17 @@
+# Entornos virtuales
+inventario
+
+# Archivos extra
+yolo11n.pt
+sistema/yolo11n.pt
+
+sistema/templates/vision_artificial
+sistema/templates/trabajos
+sistema/sistema/basefirebase
+# Variables de entorno y credenciales (Seguridad)
+.env
+*.secrets
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

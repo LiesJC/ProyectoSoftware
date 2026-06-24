@@ -1,0 +1,79 @@
+
+{% extends  "base.html"%}
+{% load static %}
+{%block titulo%} LISTA DE PERSONAL{%endblock%}
+
+{%block cuerpo%} 
+<div class="card">
+    <div class="card-header">
+        <a
+            name="NuevoPers"
+            id=""
+            class="btn btn-primary"
+            href="{% url 'AÑADIR_PERSONAL'%}"
+            role="button"
+            >Añadir Personal</a>
+        <a
+            name="impresion"
+            id=""
+            class="btn btn-success"
+            href="{% url 'REPORTE_VISTA_PERS'%}"
+            role="button"
+            >Imprimir Lista de Personal</a>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">LISTA DE PERSONAL</h4>
+        <div class="table-responsive">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th scope="col">Codigo</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido Paterno</th>
+                        <th scope="col">Apellido Materno</th>
+                        <th scope="col">Direccion</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Configuracion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for empleado in empleados%}
+                    <tr class="">
+                        <td>{{empleado.id}}</td>
+                        <td>{{empleado.nombre}}</td>
+                        <td>{{empleado.a_paterno}}</td>
+                        <td>{{empleado.a_materno}}</td>
+                        <td>{{empleado.direccion}}</td>
+                        <td>{{empleado.telefono}}</td>
+                        <td>{{empleado.correo}}</td>
+                        <td>
+                            <a
+                                name="Eliminar1"
+                                id=""
+                                class="btn btn-danger"
+                                href="{% url 'ELIMINAR_PERSONAL' empleado.id %}"
+                                role="button"
+                                >Eliminar</a
+                            >
+                            <a
+                                name="Modificar1"
+                                id=""
+                                class="btn btn-warning"
+                                href="{% url 'MODIFICAR_PERSONAL' empleado.id %}"
+                                role="button"
+                                >Modificar</a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        SISTEMA DE INVENTARIOS 
+    </div>
+</div>
+{%endblock%}
+
+

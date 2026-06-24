@@ -1,0 +1,95 @@
+{% extends "baseg.html" %}
+{% block titulo %}Consulta Firebase{% endblock %}
+
+{% block cuerpo %}
+<h2>Consulta de datos en Firebase</h2>
+
+<p>Estado de <strong>vision</strong>: <span id="visionStatus">{{ vision }}</span></p>
+
+<button id="btnConsulta">Consulta de datos en Firebase</button>
+
+<canvas id="canvas" width="640" height="480" style="border:1px solid #333;"></canvas>
+
+<h4>Objetos detectados</h4>
+<table>
+    <thead>
+        <tr>
+            <th>Objeto</th>
+            <th>Confidencia (%)</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_PROJECT.firebaseapp.com",
+    databaseURL: "https://visionartificial-52687-default-rtdb.firebaseio.com",
+    projectId: "TU_PROJECT",
+    storageBucket: "TU_PROJECT.appspot.com",
+    messagingSenderId: "XXXX",
+    appId: "XXXX"
+};
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const visionRef = database.ref('configuracion/vision');
+
+const visionStatus = document.getElementById('visionStatus');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const tableBody = document.getElementById('tableBody');
+
+// 🔹 WebSocket para YOLO
+const protocol = location.protocol === "https:" ? "wss" : "ws";
+const ws = new WebSocket(`${protocol}://${location.hostname}:8000/ws/vision/`);
+
+ws.onmessage = (event) => {
+    const msg = JSON.parse(event.data);
+    
+    if(msg.type === "frame"){
+        const img = new Image();
+        img.src = "data:image/jpeg;base64," + msg.data;
+        img.onload = () => ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    if(msg.type === "counts"){
+        tableBody.innerHTML = "";
+        for(const [obj, confs] of Object.entries(msg.data)){
+            const confPerc = confs.map(c => (c*100).toFixed(1)).join(", ");
+            tableBody.innerHTML += `<tr><td>${obj}</td><td>${confPerc}</td></tr>`;
+        }
+
+        // 🔹 Cuando termine YOLO, resetea vision a False
+        fetch("{% url 'toggle_vision' %}", {
+            method: 'POST',
+            headers: {'X-CSRFToken':'{{ csrf_token }}'},
+            body: JSON.stringify({"reset": true})
+        });
+    }
+};
+
+// 🔹 Botón para activar vision (False → True)
+document.getElementById('btnConsulta').onclick = () => {
+    fetch("{% url 'toggle_vision' %}", {
+        method:'POST', 
+        headers:{'X-CSRFToken':'{{ csrf_token }}'}
+    });
+};
+
+// 🔹 Listener Firebase para detectar cambios en tiempo real
+visionRef.on('value', (snapshot) => {
+    const value = snapshot.val();
+    visionStatus.textContent = value;
+
+    if(value){ 
+        ws.send("procesar");  // dispara el consumer de YOLO
+    }
+});
+</script>
+
+{% endblock %}
